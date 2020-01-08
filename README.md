@@ -1,6 +1,6 @@
 # UAS : Minikube untuk menjalankan Web App berbasis Go Lang
 
-## Bagian A : Menyiapkan Web App dan Dockerfile
+## Bagian A : Menyiapkan Web App dan Docker Image
 ### Step 1 : Inisialisasi go module
 ```bash
 $ go mod init github.com/callicoder/go-docker
@@ -129,7 +129,7 @@ EXPOSE 8080
 CMD ["./main"]
 ```
 
-### Step 4 : Membuild docker images
+### Step 4 : Membuild docker image
 #### Perintah build
 ```bash
 $ sudo docker build -t wahwahid/go-greet:v1 .
@@ -161,7 +161,7 @@ Step 8/8 : CMD ./main
 Successfully built 5ade4ecaf2e5
 ```
 
-#### Mengecek docker images
+#### Mengecek docker image
 ```
 $ sudo docker images                         
 
@@ -169,7 +169,7 @@ REPOSITORY           TAG                 IMAGE ID            CREATED            
 wahwahid/go-greet    v1                  5ade4ecaf2e5        3 minutes ago       812 MB
 ```
 
-### Step 5 : Publish docker images
+### Step 5 : Publish docker image
 #### Login ke dockerhub
 ```bash
 $ sudo docker login            
@@ -180,7 +180,7 @@ Password:
 Login Succeeded
 ```
 
-#### Push docker
+#### Push docker image
 ```bash
 $ sudo docker push wahwahid/go-greet:v1
 
@@ -248,7 +248,7 @@ Opening in existing browser session.
 ```
 ![Minikube Dashboard](./img/b02.png)
 
-## Bagian C : Melakukan Deployment dengan Minikube
+## Bagian C : Melakukan Deployment dengan Kubernetes
 ### Step 1 : Membuat deployment
 #### Membuat deployment bernama "go-greet" dengan image "wahwahid/go-greet:v1"
 ```bash
@@ -336,15 +336,15 @@ users:
     client-key: /home/wahid/.minikube/client.key
 ```
 
-## Bagian D : Membuat suatu service dengan Minikube
-### Step 1 : Mengekspose Pod ke Public
+## Bagian D : Membuat suatu service di Kubernetes
+### Step 1 : Membuat service dengan mengekspose deployment go-greet port 8080
 ```bash
 $ kubectl expose deployment go-greet --type=LoadBalancer --port=8080
 
 service/go-greet exposed
 ```
 
-### Step 2 : Melihat Service yang tersedia
+### Step 2 : Melihat Service yang tersedia 
 ```bash
 $ kubectl get services
 
@@ -352,6 +352,8 @@ NAME         TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
 go-greet     LoadBalancer   10.96.192.2   <pending>     8080:30495/TCP   45s
 kubernetes   ClusterIP      10.96.0.1     <none>        443/TCP          70m
 ```
+
+Terlihat port 8080 milik go-greet terekspose ke port 30495
 
 ### Step 3 : Membuka Service
 ```bash 
